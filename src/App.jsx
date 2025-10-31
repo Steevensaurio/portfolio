@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 function App() {
 
   const [activeSection, setActiveSection] = useState('inicio');
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const sections = [
     { id: 'inicio', title: 'Inicio' },
@@ -44,16 +45,21 @@ function App() {
   return (
     <div className="min-h-screen bg-slate-950">
       {/* Navegación fija */}
-      <nav className="fixed top-0 left-0 right-0 bg-slate-900 shadow-md z-50">
-        <div className="max-w-6xl mx-auto px-4">
+       <nav className="fixed top-0 left-0 right-0 bg-slate-900 shadow-md z-50">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="flex justify-between items-center h-16">
-            <div className="text-xl font-bold text-white"><span className='text-blue-800'>Dev </span>Steeven</div>
-            <ul className="flex space-x-1">
+            {/* Logo */}
+            <div className="text-lg sm:text-xl font-bold text-white">
+              <span className='text-blue-500'>Dev </span>Steeven
+            </div>
+
+            {/* Menú Desktop */}
+            <ul className="hidden md:flex space-x-1">
               {sections.map((section) => (
                 <li key={section.id}>
                   <button
                     onClick={() => scrollToSection(section.id)}
-                    className={`px-4 py-2 rounded-lg transition-all duration-300 ${
+                    className={`px-3 lg:px-4 py-2 rounded-lg transition-all duration-300 text-sm lg:text-base ${
                       activeSection === section.id
                         ? 'bg-cyan-500 text-white font-semibold'
                         : 'text-gray-300 hover:bg-slate-700'
@@ -64,7 +70,43 @@ function App() {
                 </li>
               ))}
             </ul>
+
+            {/* Botón hamburguesa móvil */}
+            <button 
+              className="md:hidden text-white p-2"
+              onClick={() => setMenuOpen(!menuOpen)}
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {menuOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
           </div>
+
+          {/* Menú móvil desplegable */}
+          {menuOpen && (
+            <div className="md:hidden pb-4">
+              <ul className="flex flex-col space-y-2">
+                {sections.map((section) => (
+                  <li key={section.id}>
+                    <button
+                      onClick={() => scrollToSection(section.id)}
+                      className={`w-full text-left px-4 py-2 rounded-lg transition-all duration-300 ${
+                        activeSection === section.id
+                          ? 'bg-cyan-500 text-white font-semibold'
+                          : 'text-gray-300 hover:bg-slate-700'
+                      }`}
+                    >
+                      {section.title}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </nav>
 
